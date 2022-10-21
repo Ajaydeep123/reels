@@ -1,0 +1,36 @@
+.login-container{
+    /* border:1px solid red; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8rem;
+    text-align: center;   /*ig image ko center me laane ke liye*/
+    flex-direction: row;
+}
+
+.login-card{
+    width:25rem;
+    height:18rem;
+    border: 1px solid #ccc;
+    padding: 1rem;
+}
+.bottom-card{
+    width:25rem;
+    border: 1px solid #ccc;
+ padding: 1rem;
+ margin-top: 1rem;
+}
+.insta-mob-bg{
+    background-image: url("../../assets/b1.jpg");
+    width:454px;
+    height:618px;
+}
+
+.carousel{
+    height:auto;
+    position: absolute;
+    top: 50px;
+    left: 22px;
+    
+}
+
