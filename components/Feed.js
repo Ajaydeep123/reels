@@ -1,40 +1,52 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from 'react'
 import Navbar from "./Navbar"; 
 import Upload from './Upload';
 import Avatar from '@mui/material/Avatar';
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import { AuthContext } from "../context/auth";
+import { collection, doc, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../firebase";
+import Post from "./Post"
 function Feed(){
+    const { user } = useContext(AuthContext);
+    const [userData, setUserData] = useState({});
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+      console.log(user.uid);
+      //read the user info from db
+      const unsub = onSnapshot(doc(db, "users", user.uid), (doc) => {
+        console.log("hello", doc.data());
+        setUserData(doc.data());
+      });
+      return () => {
+        unsub();
+      };
+    }, [user]);
+  
+    //get posts from db 
+    useEffect(() => {
+      console.log(user.uid);
+      const unsub = onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshot) => {
+        let tempArray = [];
+        snapshot.docs.map(doc=>tempArray.push(doc.data()))
+        // console.log("hello", doc.data());
+        setPosts([...tempArray]);
+      });
+      return () => {
+        unsub();
+      };
+    }, []);   
     return (
         <div className="feed-container">
-            <Navbar />
-            <Upload />
+      <Navbar userData={userData} />
+      <Upload userData={userData} />
             <div className="videos-container">
-                <div className="post-container">
-                    <video />
-                    <div className = "video-info">
-                        <div className = "avatar-container">
-                        <Avatar 
-                        alt="Remy Sharp" 
-                        src="/static/images/avatar/2.jpg"
-                        sx={{margin : "0.5rem"}}
-                        />
-                        <p>Ajaydeep </p>
-                        </div>
-                        <div className="post-like">
-                        <FavoriteIcon />
-                         <p>10</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="post-container">
-                    <video />
-                </div>
-                <div className="post-container">
-                    <video />
-                </div>
+            {
+          posts.map((post) => <Post postData={post} userData = { user } />)
+        }
             </div>
         </div>
     );
 }
 
-export default Feed
+export default Feed;

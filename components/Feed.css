@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color:white;
+    background-color:white; 
     padding-left: 1rem;
     padding-right: 1rem;
 }
@@ -41,17 +41,17 @@
     height: 100%;
     width:20rem;
     margin-bottom: 0.6rem;
+    /* margin-top: 1rem; */
+    position: relative;
 }
 .post-container>video{
     height: 100%;
     width:20rem;
     object-fit: contain;
-    /* background-color: black; */
+    background-color: black;
     border-radius: 15px;
-    scroll-snap-align: start;
-    position: relative;
 }
-.video-info{
+.videos-info{
     position: absolute;
     width: 20rem;
     display: flex;
@@ -74,6 +74,8 @@
     width: 20%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 3rem;
 }
 @media screen and (max-width:500px){
     .nav-icons{

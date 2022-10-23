@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { AuthContext } from '../../context/auth';
 import { storage, db } from "../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { setDoc,doc } from 'firebase/firestore';
+import { doc, setDoc} from 'firebase/firestore';
 
 
 function index() {
@@ -23,11 +23,11 @@ function index() {
   const router = useRouter();
   const { signup, user } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     router.push("/");
-  //   }
-  // }, [user]); 
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user]); 
 
   let handleClick = async() => {
     console.log(email);
@@ -69,8 +69,11 @@ function index() {
               fullName,
               email,
               password,
-              downloadURL
-            }
+              downloadURL,
+              uid: userInfo.user.uid,
+              posts:[],
+            };
+                            // db,collection name, document name
 
             await setDoc(doc(db, "users", userInfo.user.uid), userData);
             console.log("doc added to db");
@@ -90,6 +93,7 @@ function index() {
     setLoading(false);
 
   }
+
 
 
 
