@@ -14,17 +14,29 @@ import { db } from "../firebase";
 function Profile() {
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState({});
-  const [posts, setPosts] = useState([]);
+  const [postIds, setPostIds] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
   useEffect(() => {
     console.log(user.uid);
     const unsub = onSnapshot(doc(db, "users", user.uid), (doc) => {
       setUserData(doc.data());
+      setPostIds(doc.data().posts);
     });
     return () => {
       unsub();
     };
   }, [user]);
-
+  
+  useEffect(() => {
+    let tempArr = [];
+    postIds.map(pid => {
+      const unsub = onSnapshot(doc(db, "posts", pid), (doc) => {
+        tempArr.push(doc.data());
+        setUserPosts([...tempArr]);
+        console.log("hello",tempArr);
+      });
+    })
+  }, [postIds]);
   // const myLoader = ({ src }) => {
   //   return `${userData.downloadURL}`;
   // };
@@ -50,11 +62,9 @@ function Profile() {
           </div>
         </div>
         <hr />
-        <div className="profile-posts">
-            <video src="https://firebasestorage.googleapis.com/v0/b/reels-next.appspot.com/o/posts%2F9ccfcb74-0c49-4291-94a8-204c519e8ba6?alt=media&token=b0d93373-17f6-4fb5-a043-34db03ba8b59"/>
-            <video src="https://firebasestorage.googleapis.com/v0/b/reels-next.appspot.com/o/posts%2F9ccfcb74-0c49-4291-94a8-204c519e8ba6?alt=media&token=b0d93373-17f6-4fb5-a043-34db03ba8b59"/>
-            <video src="https://firebasestorage.googleapis.com/v0/b/reels-next.appspot.com/o/posts%2F9ccfcb74-0c49-4291-94a8-204c519e8ba6?alt=media&token=b0d93373-17f6-4fb5-a043-34db03ba8b59"/>
-        </div>          
+        <div className="profile-posts">{userPosts.map(post => (
+          <video src={post.postURL}></video>
+        ))}</div>         
         </div>
       </div>
 
