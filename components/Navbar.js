@@ -14,8 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Image from 'next/image'
 import insta from '../assets/ig.jpeg';
-import HomeIcon from "@mui/icons-material/Home";
-import ExploreIcon from "@mui/icons-material/Explore";
+// import HomeIcon from "@mui/icons-material/Home";
+// import ExploreIcon from "@mui/icons-material/Explore";
 import { AuthContext } from "../context/auth";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -85,8 +85,8 @@ const ResponsiveAppBar = ({userData}) => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }} className="nav-icons-container">
-          <HomeIcon fontSize="large" className="nav-icons" />
-          <ExploreIcon fontSize="large" className="nav-icons" />
+          {/* <HomeIcon fontSize="large" className="nav-icons" />
+          <ExploreIcon fontSize="large" className="nav-icons" /> */}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" 

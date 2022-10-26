@@ -67,6 +67,7 @@ function Upload({ userData }) {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
           let post = {
             likes: [],
+            comments: [],
             postId: uid,
             postURL: downloadURL,
             profileName: userData.fullName,

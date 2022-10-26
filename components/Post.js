@@ -15,14 +15,19 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, CardActions } from '@mui/material';
+import Comment from './Comment';
+import DisplayComments from './DisplayComments'
+import * as ReactDOM from 'react-dom';
+
 function Post({ postData, userData}) {
-    // console.log("123456",postData);
+    console.log("123456",userData);
   const [like, setLike] = useState(false);
   // heart red -> jab logged in user ne like kia hta h 
   const [open, setOpen] = React.useState(false);
+  const [isMute, setIsMute] = useState(true);
 
   const handleClickOpen = () => {
-    console.log("dialog opened");
+    console.log("dialog opened");  
   setOpen(true);
 };
 
@@ -37,7 +42,7 @@ function Post({ postData, userData}) {
     else {
       setLike(false);
     }
-  }, [postData])
+  }, [postData]);
 
   const handleLike = async () => {
     if (like) { //unlike
@@ -48,96 +53,89 @@ function Post({ postData, userData}) {
     else { //like
       // likes["12345677iuyhtgfrd"]
       await updateDoc(doc(db, "posts", postData.postId), {
-        likes: arrayUnion(userData.uid)
-      })
+        likes: arrayUnion(userData.uid),
+      });
     }
+  };
+  const handleMute = () => {
+    if (isMute) {
+      setIsMute(false);
+    }
+    else setIsMute(true);
   }
 
-    return (
-      <div className="post-container">
-        <video src={postData.postURL} />
-        <div className="videos-info">
-          <div className="avatar-container">
-            <Avatar
-              alt="Remy Sharp"
-              src={postData.profilePhotoURL}
-              sx={{ margin: "0.5rem" }}
-            />
-            <p style={{ color: "white" }}>{postData.profileName}</p>
-          </div> 
-          <div className="post-like">
-            <FavoriteIcon
-              style={like ? { color: "red" } : { color: "white" }}
-              onClick={handleLike}
-            />
-            <p style={{ color: "white" }}>{postData.likes.length}</p>
-            <AddCommentIcon
-              onClick={handleClickOpen}
-              style={{ color: "white" }}
-            />
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-              maxWidth="md"
-            >
-              <div className="modal-container">
-                <div className="video-modal">
-                  <video src={postData.postURL} />
-                </div>
-                <div className="comments-modal">
-                  <Card sx={{ maxWidth: 345 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Lizard
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Lizards are a widespread group of squamate reptiles,
-                          with over 6,000 species, ranging across all continents
-                          except Antarctica
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                    </CardActions>
-                  </Card>
-                  <Card sx={{ maxWidth: 345 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Lizard
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Lizards are a widespread group of squamate reptiles,
-                          with over 6,000 species, ranging across all continents
-                          except Antarctica
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                    </CardActions>
-                  </Card>
+  const handleNextVideo = (e) => {
+    //get the next video 
+    let nextVideo = ReactDOM.findDOMNode(e.target).parentNode.nextSibling;
+    if (nextVideo) {
+
+      nextVideo.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+  return (
+    <div className="post-container">
+ <video
+        src={postData.postURL}
+        muted={isMute}
+        onClick={handleMute}
+        onEnded={handleNextVideo}
+        
+      />      <div className="videos-info">
+        <div className="avatar-container">
+          <Avatar
+            alt="Remy Sharp"
+            src={postData.profilePhotoURL}
+            sx={{ margin: "0.5rem" }}
+          />
+          <p style={{ color: "white" }}>{postData.profileName}</p>
+        </div>
+        <div className="post-like">
+          <FavoriteIcon
+            style={like ? { color: "red" } : { color: "white" }}
+            onClick={handleLike}
+          />
+          <p style={{ color: "white" }}>{postData.likes.length}</p>
+          <AddCommentIcon
+            onClick={handleClickOpen}
+            style={{ color: "white" }}
+          />
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            fullWidth={true}
+            maxWidth="md"
+          >
+            <div className="modal-container">
+              <div className="video-modal">
+                <video autoPlay controls muted src={postData.postURL} />
+              </div>
+              <div className="comments-modal">
+              <Card className="card1">
+                  <DisplayComments postData={postData} />
+                </Card>
+               <Card className="card2">
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {postData.likes.length == 0
+                      ? "Be the first one to like this post"
+                      : `Liked by ${postData.likes.length} users`}
+                  </Typography>
+                  {/* heart */}
+                  <div className="post-like2">
+                    <FavoriteIcon
+                      style={like ? { color: "red" } : { color: "black" }}
+                      onClick={handleLike}
+                    />
+                    <Comment userData={userData} postData={postData} />
+                  </div>
+                </Card>
                 </div>
               </div>
             </Dialog>
