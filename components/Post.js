@@ -6,15 +6,8 @@ import { db } from "../firebase";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, CardActions } from '@mui/material';
 import Comment from './Comment';
 import DisplayComments from './DisplayComments'
 import * as ReactDOM from 'react-dom';
@@ -66,7 +59,7 @@ function Post({ postData, userData}) {
 
   const handleNextVideo = (e) => {
     //get the next video 
-    let nextVideo = ReactDOM.findDOMNode(e.target).parentNode.nextSibling;
+    let nextVideo =e.target.parentNode.nextSibling;
     if (nextVideo) {
 
       nextVideo.scrollIntoView({ behavior: "smooth" });

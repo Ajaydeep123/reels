@@ -11,7 +11,7 @@ import {
   query,
 } from "firebase/firestore";
 import { db } from "../firebase";
-function Profile() {
+function Profile1() {
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState({});
   const [postIds, setPostIds] = useState([]);
@@ -26,7 +26,7 @@ function Profile() {
       unsub();
     };
   }, [user]);
-  
+   //To add the uids of posts in posts state
   useEffect(() => {
     let tempArr = [];
     postIds.map(pid => {
@@ -62,13 +62,15 @@ function Profile() {
           </div>
         </div>
         <hr />
-        <div className="profile-posts">{userPosts.map(post => (
-          <video src={post.postURL}></video>
-        ))}</div>         
-        </div>
+        <div className="profile-posts">
+          {userPosts.map((post,index) => (
+          <video key={index} src={post.postURL}></video>
+        ))}
+        </div>         
       </div>
+    </div>
 
   );
 }
 
-export default Profile;
+export default Profile1;

@@ -25,17 +25,15 @@ function DisplayComments({ postData }) {
         <CircularProgress color="success" />
       ) : (
         <>
-          {allComments.map((commentObj) => {
+          {allComments.map((commentObj,index) => {
             return (
-              <div style={{ display: "flex" }}>
-                <Avatar src={commentObj.userDP} />                <p>
-                <span style={{ fontWeight: "bold" }}>
-                    &nbsp;
-                    {commentObj.userName}
-                  </span>
-                  &nbsp;&nbsp;
-                  {commentObj.text}
-                </p>
+              <div key={index} style={{ display: "flex", flexDirection:"row", alignItems:"center"}}>
+                <Avatar src={commentObj.userDP} sx={{marginRight:"0.50rem"}} />               
+                <p style={{marginTop:"0.75rem", marginBottom:"0.75rem", }}>
+               
+               <span style={{fontWeight:"500", marginRight:"0.5rem"}}>{commentObj.userName  }</span>
+              <span style={{fontWeight:"300"}}>{commentObj.text}</span> 
+             </p>
               </div>
             );
           })}
